@@ -9,6 +9,11 @@ import Recommend from './pages/Recommend';
 import QRScanner from "./pages/QRScanner";
 import Social_invest from "./pages/Social_invest";
 
+import Booking from "./pages/Booking";
+import BillPayment from "./pages/BillPayment";
+import SpareChangeWidget from "./pages/SpareChangeWidget";
+import UnusedSubscriptions from "./pages/UnusedSubscriptions";
+
 
 
 
@@ -33,6 +38,12 @@ const App = () => {
         <Route path="/recommend" element={<Recommend />} />
         <Route path="/qr-scanner" element={<QRScanner />} />
         <Route path="/social-invest" element={<Social_invest />} />
+        <Route path="/booking" element={<Booking />} />
+        <Route path="/bill-payment" element={<BillPayment />} />
+        <Route path="/spare-change-widget" element={<SpareChangeWidget />} />
+        <Route path="/unused-subscriptions" element={<UnusedSubscriptions />} />
+
+
        
       </Routes>
     </Router>
