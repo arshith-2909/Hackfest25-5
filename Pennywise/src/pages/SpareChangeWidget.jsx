@@ -6,7 +6,7 @@ const SpareChangeWidget = () => {
 
   const fetchTotal = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/spare-change");
+      const res = await axios.get("http://localhost:5002/api/spare-change");
       setTotal(res.data.totalSpareChange);
     } catch (err) {
       console.error("Failed to load spare change:", err);

@@ -1,48 +1,71 @@
-// QRScanner.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 
 const QRScanner = () => {
   const [qrCodeData, setQrCodeData] = useState(null);
   const [info, setInfo] = useState(null);
+  const scannerRef = useRef(null);
+  const isScanningRef = useRef(false); // Track scanning state
 
   useEffect(() => {
-    const scanner = new Html5Qrcode("qr-reader");
+    const startScanner = async () => {
+      const qrRegion = document.getElementById("qr-reader");
+      if (!qrRegion) return; // Prevents null DOM access error
 
-    Html5Qrcode.getCameras().then((devices) => {
-      if (devices && devices.length) {
-        const camId = devices[0].id;
-        scanner.start(
-          camId,
-          {
-            fps: 10,
-            qrbox: 250,
-          },
-          async (decodedText) => {
-            scanner.stop(); // stop after first successful scan
-            setQrCodeData(decodedText);
+      scannerRef.current = new Html5Qrcode("qr-reader");
 
-            const res = await fetch("http://localhost:5000/api/qrcode", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ qr: decodedText }),
-            });
+      try {
+        const devices = await Html5Qrcode.getCameras();
+        if (devices && devices.length) {
+          const camId = devices[0].id;
 
-            const json = await res.json();
-            setInfo(json);
-          },
-          (errorMessage) => {
-            console.warn("Scan error", errorMessage);
-          }
-        );
+          isScanningRef.current = true;
+
+          await scannerRef.current.start(
+            camId,
+            { fps: 10, qrbox: 250 },
+            async (decodedText) => {
+              if (isScanningRef.current) {
+                isScanningRef.current = false;
+                await scannerRef.current.stop(); // stop safely
+                setQrCodeData(decodedText);
+
+                try {
+                  const res = await fetch("http://localhost:5000/api/qrcode", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ qr: decodedText }),
+                  });
+
+                  const json = await res.json();
+                  setInfo(json);
+                } catch (err) {
+                  console.error("API error:", err);
+                }
+              }
+            },
+            (errorMessage) => {
+              console.warn("Scan error", errorMessage);
+            }
+          );
+        }
+      } catch (err) {
+        console.error("Camera access error:", err);
       }
-    });
+    };
+
+    startScanner();
 
     return () => {
-      scanner
-        .stop()
-        .then(() => console.log("Scanner stopped"))
-        .catch((err) => console.log("Stop error", err));
+      if (scannerRef.current && isScanningRef.current) {
+        scannerRef.current
+          .stop()
+          .then(() => {
+            console.log("Scanner stopped");
+            isScanningRef.current = false;
+          })
+          .catch((err) => console.log("Stop error", err));
+      }
     };
   }, []);
 

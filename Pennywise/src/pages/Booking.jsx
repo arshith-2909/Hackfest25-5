@@ -9,7 +9,7 @@ const Booking = () => {
 
   const handleBooking = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/transaction", {
+      const res = await axios.post("http://localhost:5002/api/transaction", {
         amount: parseFloat(amount),
         type: "booking",
         spareEnabled,
