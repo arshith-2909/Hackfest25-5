@@ -20,6 +20,7 @@ import { useState } from "react";
 
 
 
+
 const App = () => {
   const [user, setUser] = useState(null); // 👈 add this
 
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/booking" element={<Booking />} />
         <Route path="/bill-payment" element={<BillPayment />} />
         <Route path="/spare-change-widget" element={<SpareChangeWidget />} />
+        
 
        
       </Routes>

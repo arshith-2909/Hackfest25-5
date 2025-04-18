@@ -2,12 +2,14 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
 import math
+from db import mongo, MONGO_URI
+
 
 app = Flask(__name__)
 CORS(app)
 
 # MongoDB connection
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient(MONGO_URI)
 db = client["pennywise"]
 transactions = db["transactions"]
 
