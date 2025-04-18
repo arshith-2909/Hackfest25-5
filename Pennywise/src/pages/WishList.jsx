@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function Wishlist({ wishlist, customTarget, updateCustomTarget, removeFromWishlist }) {
+function Wishlist({ wishlist = [], customTarget, updateCustomTarget, removeFromWishlist }) {
   const [editMode, setEditMode] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
@@ -18,6 +18,10 @@ function Wishlist({ wishlist, customTarget, updateCustomTarget, removeFromWishli
   // Handle manual target entry and addition to the current target
   const handleManualTarget = () => {
     const newTarget = Number(inputValue);
+    if (isNaN(newTarget) || newTarget <= 0) {
+      alert("Please enter a valid positive number for the target.");
+      return;
+    }
     updateCustomTarget(Number(customTarget) + newTarget); // Add manual target to current target
     setInputValue(""); // Clear input field after adding
   };
@@ -74,7 +78,7 @@ function Wishlist({ wishlist, customTarget, updateCustomTarget, removeFromWishli
           onClick={handleSetWishlistAsTarget} // Add wishlist total to current target
           className="bg-indigo-600 text-white px-3 py-2 rounded w-full"
         >
-          🎯 Set Wishlist as Target (₹{totalWishlist})+ {customTarget}
+          🎯 Set Wishlist as Target (₹{totalWishlist}) + {customTarget}
         </button>
 
         {/* 2. Set Custom Target */}

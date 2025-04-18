@@ -15,10 +15,10 @@ import BillPayment from "./pages/BillPayment";
 import SpareChangeWidget from "./pages/SpareChangeWidget";
 import Social_invest from "./pages/Social_invest";
 import Product from "./pages/Product";
-import WishList from "./pages/WishList";
 
 import DetailsForm from "./pages/DetailForm";
 
+import WishList from "./pages/WishList";
 
 
 
