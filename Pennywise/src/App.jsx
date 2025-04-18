@@ -15,6 +15,7 @@ import SpareChangeWidget from "./pages/SpareChangeWidget";
 import Social_invest from "./pages/Social_invest";
 import { useState } from "react";
 
+import DetailsForm from "./pages/DetailForm";
 
 
 
@@ -27,6 +28,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/details-form" element={<DetailsForm />} /> {/* ✅ add this route */}
         <Route path="/Login" element={<Login setUser={setUser} />} /> {/* ✅ pass setUser here */}
 
         <Route path="/ad" element={<Ad />} />

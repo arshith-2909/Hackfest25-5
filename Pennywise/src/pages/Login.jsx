@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { auth, provider, db } from "../firebase";
+import { auth, db } from "../firebase";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signInWithPopup,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -24,32 +23,19 @@ const Login = () => {
       if (isRegistering) {
         userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+        localStorage.setItem("userEmail", user.email);
 
         await setDoc(doc(db, "users", user.uid), {
           email: user.email,
           phoneNumber: phoneNumber,
         });
+
+        navigate("/details-form"); // only navigate on signup
       } else {
-        userCredential = await signInWithEmailAndPassword(auth, email, password);
+        await signInWithEmailAndPassword(auth, email, password);
+        // No redirection after login
+        localStorage.setItem("userEmail", user.email);
       }
-
-      navigate("/form");
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-
-      await setDoc(doc(db, "users", user.uid), {
-        email: user.email,
-        phoneNumber: phoneNumber || "N/A",
-      }, { merge: true });
-
-      navigate("/form");
     } catch (err) {
       setError(err.message);
     }
@@ -125,24 +111,6 @@ const Login = () => {
             </>
           )}
         </div>
-
-        <div className="flex items-center my-4">
-          <div className="flex-grow h-px bg-gray-300"></div>
-          <span className="mx-2 text-sm text-gray-500">or</span>
-          <div className="flex-grow h-px bg-gray-300"></div>
-        </div>
-
-        <button
-          onClick={handleGoogleLogin}
-          className="w-full py-2 bg-white border border-gray-300 rounded-lg hover:shadow-md flex items-center justify-center transition"
-        >
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
-            alt="Google"
-            className="w-5 h-5 mr-2"
-          />
-          Sign in with Google
-        </button>
       </div>
     </div>
   );
