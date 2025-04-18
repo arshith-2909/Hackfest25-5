@@ -8,24 +8,21 @@ import Portfolio from './pages/Portfolio';
 import Recommend from './pages/Recommend';
 import QRScanner from "./pages/QRScanner";
 import Social_invest from "./pages/Social_invest";
-
+import Login from "./pages/Login"
+import React, { useState } from "react"; // 👈 add this
 
 
 
 const App = () => {
+  const [user, setUser] = useState(null); // 👈 add this
+
   return (
     <Router>
       <Routes>
- 
+        <Route path="/Login" element={<Login setUser={setUser} />} /> {/* ✅ pass setUser here */}
 
-       
-        
         <Route path="/ad" element={<Ad />} />
-    
         <Route path="/chatbot" element={<Chatbot />} />
-       
-      
-     
         <Route path="/game" element={<Game />} />
         <Route path="/user-investment" element={<UserInvestment />} />
         <Route path="/auto-investment" element={<AutoInvestment />} />
@@ -33,10 +30,10 @@ const App = () => {
         <Route path="/recommend" element={<Recommend />} />
         <Route path="/qr-scanner" element={<QRScanner />} />
         <Route path="/social-invest" element={<Social_invest />} />
-       
       </Routes>
     </Router>
   );
 };
+
 
 export default App;
