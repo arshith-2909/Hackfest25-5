@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Ad from "./pages/Ad";
 import Chatbot from "./pages/Chatbot";
@@ -13,7 +14,8 @@ import Booking from "./pages/Booking";
 import BillPayment from "./pages/BillPayment";
 import SpareChangeWidget from "./pages/SpareChangeWidget";
 import Social_invest from "./pages/Social_invest";
-import { useState } from "react";
+import Product from "./pages/Product";
+import WishList from "./pages/WishList";
 
 import DetailsForm from "./pages/DetailForm";
 
@@ -45,6 +47,8 @@ const App = () => {
         <Route path="/booking" element={<Booking />} />
         <Route path="/bill-payment" element={<BillPayment />} />
         <Route path="/spare-change-widget" element={<SpareChangeWidget />} />
+        <Route path="/product" element={<Product />} />
+        <Route path="/wishlist" element={<WishList />} />
         
 
        

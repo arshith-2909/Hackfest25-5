@@ -2,6 +2,8 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const mongoose = require("mongoose");
+
 
 
 require('dotenv').config();
@@ -446,6 +448,47 @@ app.post('/profit-loss', (req, res) => {
     profitLoss,
     totalProfitLoss,
   });
+});
+
+
+let wishlist = []; // Frontend-only, temporary
+
+app.post("/wishlist", (req, res) => {
+  const { id, name, price } = req.body;
+  wishlist.push({ id, name, price });
+  res.status(201).json({ message: "Added to wishlist (frontend only)" });
+});
+
+app.get("/wishlist", (req, res) => {
+  res.json(wishlist);
+});
+
+const MONGO_URI = "mongodb+srv://karthik12:Karthik1234@cluster0.zi1bjbr.mongodb.net/target";
+// Mongo connection
+mongoose.connect(MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const targetSchema = new mongoose.Schema({
+  amount: Number,
+});
+
+const Target = mongoose.model("Target", targetSchema);
+
+// Save custom target
+app.post("/target", async (req, res) => {
+  const { amount } = req.body;
+  await Target.deleteMany(); // Clear previous
+  const newTarget = new Target({ amount });
+  await newTarget.save();
+  res.status(201).json({ message: "Target saved" });
+});
+
+// Get target
+app.get("/target", async (req, res) => {
+  const target = await Target.findOne();
+  res.json(target || { amount: 0 });
 });
 
 // Start the server
