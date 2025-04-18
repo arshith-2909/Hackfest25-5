@@ -7,6 +7,14 @@ import AutoInvestment from './pages/AutoInvestment';
 import Portfolio from './pages/Portfolio';
 import Recommend from './pages/Recommend';
 import QRScanner from "./pages/QRScanner";
+import UnusedSubscription from "./pages/UnusedSubscriptions";
+import Login from "./pages/Login";
+import Booking from "./pages/Booking";
+import BillPayment from "./pages/BillPayment";
+import SpareChangeWidget from "./pages/SpareChangeWidget";
+import Social_invest from "./pages/Social_invest";
+import { useState } from "react";
+
 
 
 
@@ -29,6 +37,12 @@ const App = () => {
         <Route path="/recommend" element={<Recommend />} />
         <Route path="/qr-scanner" element={<QRScanner />} />
         <Route path="/social-invest" element={<Social_invest />} />
+      
+        <Route path="/unused-subscription" element={<UnusedSubscription />} />
+        <Route path="/booking" element={<Booking />} />
+        <Route path="/bill-payment" element={<BillPayment />} />
+        <Route path="/spare-change-widget" element={<SpareChangeWidget />} />
+
        
       </Routes>
     </Router>
