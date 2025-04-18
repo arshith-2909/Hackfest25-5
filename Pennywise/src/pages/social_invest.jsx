@@ -39,7 +39,7 @@ export default function App() {
   // API: Get All Circles
   const getAllCircles = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/circles');
+      const res = await axios.get('http://localhost:5001/circles');
       setAllCircles(res.data);
     } catch (err) {
       console.error(err);
@@ -50,7 +50,7 @@ export default function App() {
   // API: Get Members of a Circle
   const getMembers = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/circles/${memberCircleId}`);
+      const res = await axios.get(`http://localhost:5001/circles/${memberCircleId}`);
       setMembersList(res.data.members || []);
     } catch (err) {
       console.error(err);
@@ -61,7 +61,7 @@ export default function App() {
   // API: Join Circle
   const joinCircle = async () => {
     try {
-      const res = await axios.put(`http://localhost:5000/circles/${joinCircleId}/join`, {
+      const res = await axios.put(`http://localhost:5001/circles/${joinCircleId}/join`, {
         userId: joinUserId
       });
       setResponseMsg(res.data.message);
@@ -74,7 +74,7 @@ export default function App() {
   // API: Contribute to Circle
   const contribute = async () => {
     try {
-      const res = await axios.post(`http://localhost:5000/circles/${contributecircleId}/contribute`, {
+      const res = await axios.post(`http://localhost:5001/circles/${contributecircleId}/contribute`, {
      
         userId: contributeUserId,
         amount: parseFloat(contributionAmount)
