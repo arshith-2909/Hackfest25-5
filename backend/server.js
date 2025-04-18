@@ -449,9 +449,8 @@ app.post('/profit-loss', (req, res) => {
     totalProfitLoss,
   });
 });
-
-
-let wishlist = []; // Frontend-only, temporary
+// 🛒 Frontend-only wishlist storage
+let wishlist = [];
 
 app.post("/wishlist", (req, res) => {
   const { id, name, price } = req.body;
@@ -463,32 +462,107 @@ app.get("/wishlist", (req, res) => {
   res.json(wishlist);
 });
 
-const MONGO_URI = "mongodb+srv://karthik12:Karthik1234@cluster0.zi1bjbr.mongodb.net/target";
-// Mongo connection
-mongoose.connect(MONGO_URI, {
+// // 📦 MongoDB connection
+// const MONGO_URI = "mongodb+srv://karthik12:Karthik1234@cluster0.zi1bjbr.mongodb.net/target";
+
+// mongoose.connect(MONGO_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
+
+// // 📄 Target schema with email
+// const targetSchema = new mongoose.Schema({
+//   email: String,
+//   amount: Number,
+// });
+
+// const Target = mongoose.model("Target", targetSchema);
+
+// // 💾 Save or update target for specific email
+// app.post("/api/target", async (req, res) => {
+//   const { email, amount } = req.body;
+
+//   try {
+//     let target = await Target.findOne({ email });
+
+//     if (target) {
+//       target.amount = amount;
+//       await target.save();
+//     } else {
+//       target = new Target({ email, amount });
+//       await target.save();
+//     }
+
+//     res.status(201).json({ message: "Target saved", target });
+//   } catch (err) {
+//     res.status(500).json({ error: "Failed to save target" });
+//   }
+// });
+
+// // 📤 Get target by email
+// app.get("/target", async (req, res) => {
+//   const { email } = req.query;
+
+//   try {
+//     const target = await Target.findOne({ email });
+//     res.json(target || { amount: 0 });
+//   } catch (err) {
+//     res.status(500).json({ error: "Failed to fetch target" });
+//   }
+// });
+
+
+// ✅ Connect to MongoDB
+mongoose.connect("mongodb+srv://karthik12:Karthik1234@cluster0.zi1bjbr.mongodb.net/target", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
+// ✅ Target Schema (has email + amount)
 const targetSchema = new mongoose.Schema({
-  amount: Number,
+  email: { type: String, required: true },
+  amount: { type: Number, required: true },
 });
 
 const Target = mongoose.model("Target", targetSchema);
 
-// Save custom target
-app.post("/target", async (req, res) => {
-  const { amount } = req.body;
-  await Target.deleteMany(); // Clear previous
-  const newTarget = new Target({ amount });
-  await newTarget.save();
-  res.status(201).json({ message: "Target saved" });
+// ✅ Save or Update target
+app.post("/api/target", async (req, res) => {
+  const { email, amount } = req.body;
+
+  if (!email || amount == null) {
+    return res.status(400).json({ error: "Email and amount are required" });
+  }
+
+  try {
+    let existing = await Target.findOne({ email });
+
+    if (existing) {
+      existing.amount = amount;
+      await existing.save();
+      res.status(200).json({ message: "Target updated", data: existing });
+    } else {
+      const newTarget = new Target({ email, amount });
+      await newTarget.save();
+      res.status(201).json({ message: "Target saved", data: newTarget });
+    }
+  } catch (err) {
+    console.error("Error saving target:", err);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
-// Get target
-app.get("/target", async (req, res) => {
-  const target = await Target.findOne();
-  res.json(target || { amount: 0 });
+// ✅ Get target by email
+app.get("/api/target/:email", async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const target = await Target.findOne({ email });
+    res.status(200).json(target || { amount: 0 });
+  } catch (err) {
+    console.error("Error fetching target:", err);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 // Start the server
