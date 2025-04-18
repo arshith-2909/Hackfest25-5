@@ -7,9 +7,8 @@ import AutoInvestment from './pages/AutoInvestment';
 import Portfolio from './pages/Portfolio';
 import Recommend from './pages/Recommend';
 import QRScanner from "./pages/QRScanner";
-import Social_invest from "./pages/Social_invest";
-import Login from "./pages/Login"
-import React, { useState } from "react"; // 👈 add this
+
+
 
 
 
@@ -30,6 +29,7 @@ const App = () => {
         <Route path="/recommend" element={<Recommend />} />
         <Route path="/qr-scanner" element={<QRScanner />} />
         <Route path="/social-invest" element={<Social_invest />} />
+       
       </Routes>
     </Router>
   );
