@@ -20,7 +20,7 @@ import DetailsForm from "./pages/DetailForm";
 
 import WishList from "./pages/WishList";
 import Recharge from "./pages/Recharge";
-
+import Transaction from "./pages/Transaction";
 
 
 
@@ -51,6 +51,7 @@ const App = () => {
         <Route path="/product" element={<Product />} />
         <Route path="/wishlist" element={<WishList />} />
         <Route path="/recharge" element={<Recharge />} />
+        <Route path="/transaction" element={<Transaction/>}/>
         
 
        
