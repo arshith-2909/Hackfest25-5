@@ -8,13 +8,12 @@ const BillPayment = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [paymentData, setPaymentData] = useState(null);
   const [spareEnabled, setSpareEnabled] = useState(true);
-<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
-=======
+
    const [sparePercentage, setSparePercentage] = useState(0.02);
  useEffect(() => {
     const storedSparePercentage = localStorage.getItem("userSpareChange");
->>>>>>> 174171a1af564b0b374ccf775d73111759255a85
+
 
     // Check if the value is valid and is a number
     if (storedSparePercentage && !isNaN(storedSparePercentage)) {
