@@ -20,11 +20,10 @@ import DetailsForm from "./pages/DetailForm";
 
 import WishList from "./pages/WishList";
 import Recharge from "./pages/Recharge";
-<<<<<<< HEAD
+
 import Dashboard from "./pages/dashboard";
-=======
 import Transaction from "./pages/Transaction";
->>>>>>> 35935a846934e08e5734695ee64162d9802399f9
+
 
 
 
