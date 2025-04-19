@@ -1,46 +1,61 @@
 import { useEffect, useState } from "react";
 
-function Wishlist({ wishlist, removeFromWishlist }) {
-  const email = localStorage.getItem("userEmail"); // Get email from localStorage
+function Wishlist({ wishlist = [], removeFromWishlist }) {
+  const email = localStorage.getItem("userEmail");
 
   const [customTarget, setCustomTarget] = useState(0);
   const [inputValue, setInputValue] = useState("");
   const [editMode, setEditMode] = useState(false);
 
-  // Function to send email and target to the backend
-  const updateCustomTarget = async (newTarget) => {
+  const getTotalWishlist = () => {
     try {
-      // Send email and target amount to backend
+      return wishlist.reduce((sum, item) => sum + (item?.price || 0), 0);
+    } catch (err) {
+      console.error("❌ Error calculating wishlist total:", err);
+      return 0;
+    }
+  };
+
+  const totalWishlist = getTotalWishlist();
+  const totalTarget = customTarget + totalWishlist;
+
+  const updateCustomTarget = async (customTargetValue) => {
+    try {
+      const totalWishlistValue = getTotalWishlist();
+      const totalTargetValue = Number(customTargetValue) + Number(totalWishlistValue);
+
       const res = await fetch("http://localhost:5000/api/target", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, amount: newTarget }),
+        body: JSON.stringify({
+          email,
+          customTarget: customTargetValue,
+          totalWishlist: totalWishlistValue,
+          totalTarget: totalTargetValue,
+        }),
       });
 
       const data = await res.json();
-      console.log("Saved to MongoDB:", data);
-      setCustomTarget(newTarget);
+      console.log("✅ Saved to MongoDB:", data);
+
+      setCustomTarget(customTargetValue);
     } catch (err) {
-      console.error("Failed to save to MongoDB:", err);
+      console.error("❌ Failed to save to MongoDB:", err);
     }
   };
 
   const handleSetWishlistAsTarget = () => {
-    const totalWishlist = wishlist.reduce((sum, item) => sum + item.price, 0);
-    updateCustomTarget(Number(customTarget) + totalWishlist);
+    updateCustomTarget(customTarget);
   };
 
   const handleManualTarget = () => {
     const newTarget = Number(inputValue);
-    updateCustomTarget(Number(customTarget) + newTarget);
+    updateCustomTarget(newTarget);
     setInputValue("");
+    setEditMode(false);
   };
-
-  // Calculate total wishlist value
-  const totalWishlist = wishlist.reduce((sum, item) => sum + item.price, 0);
-  const totalTarget = totalWishlist + customTarget;
 
   return (
     <div className="bg-gray-100 p-4 rounded-xl w-full md:w-1/3">
@@ -56,12 +71,12 @@ function Wishlist({ wishlist, removeFromWishlist }) {
       ) : (
         <ul className="space-y-2">
           {wishlist.map((item) => (
-            <li key={item.id} className="flex justify-between items-center border-b pb-1">
-              <span>{item.name}</span>
+            <li key={item?.id || Math.random()} className="flex justify-between items-center border-b pb-1">
+              <span>{item?.name || "Unnamed Item"}</span>
               <div className="flex items-center gap-2">
-                <span>₹{item.price}</span>
+                <span>₹{item?.price || 0}</span>
                 <button
-                  onClick={() => removeFromWishlist(item.id)}
+                  onClick={() => removeFromWishlist?.(item?.id)}
                   className="text-red-500 text-sm"
                 >
                   ❌

@@ -24,7 +24,7 @@ import Recharge from "./pages/Recharge";
 import Dashboard from "./pages/dashboard";
 import Transaction from "./pages/Transaction";
 
-
+import Profile from "./pages/Profile";
 
 
 
@@ -35,9 +35,10 @@ const App = () => {
     <Router>
       <Routes>
       {/* ✅ add this route */}
+        <Route path="/profile" element={<Profile />} /> {/* ✅ add this route */}
         <Route path="/dashboard" element={<Dashboard />} /> {/* ✅ add this route */}
         <Route path="/details-form" element={<DetailsForm />} /> {/* ✅ add this route */}
-        <Route path="/Login" element={<Login setUser={setUser} />} /> {/* ✅ pass setUser here */}
+        <Route path="/" element={<Login setUser={setUser} />} /> {/* ✅ pass setUser here */}
 
         <Route path="/ad" element={<Ad />} />
         <Route path="/chatbot" element={<Chatbot />} />

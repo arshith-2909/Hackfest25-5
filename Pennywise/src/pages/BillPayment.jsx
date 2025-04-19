@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { doc, getDoc } from "firebase/firestore";
+import { db, auth } from "../firebase"; // Update path based on your project structure
 
 const BillPayment = () => {
   const [category, setCategory] = useState("electricity");
@@ -8,6 +10,29 @@ const BillPayment = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [paymentData, setPaymentData] = useState(null);
   const [spareEnabled, setSpareEnabled] = useState(true);
+  const [userSpareWallet, setUserSpareWallet] = useState(null);
+
+  // Fetch user's current spareChange from Firestore
+  useEffect(() => {
+    const fetchUserSpareChange = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setUserSpareWallet(data.spareChange || 0);
+        }
+      } catch (err) {
+        console.error("Error fetching spareChange from Firestore:", err);
+      }
+    };
+
+    fetchUserSpareChange();
+  }, []);
 
   const handleAmountChange = (e) => {
     const val = parseFloat(e.target.value) || 0;
@@ -31,7 +56,9 @@ const BillPayment = () => {
     setSpareEnabled(newStatus);
     updateSpare(amount, newStatus);
   };
+
   const email = localStorage.getItem("userEmail");
+
   const handleBillPayment = async () => {
     try {
       const res = await axios.post("http://localhost:5000/api/book", {
@@ -62,7 +89,6 @@ const BillPayment = () => {
         <option value="electricity">Electricity</option>
         <option value="water">Water</option>
         <option value="internet">Internet</option>
-      
         <option value="tv">DTH / TV</option>
       </select>
 
@@ -93,6 +119,12 @@ const BillPayment = () => {
       <p className="mb-4">
         💳 Total Payable Amount: <strong>₹{totalAmount}</strong>
       </p>
+
+      {userSpareWallet !== null && (
+        <p className="mb-4 text-sm text-gray-600">
+          🏦 Your Current Spare Wallet Balance: <strong>₹{userSpareWallet}</strong>
+        </p>
+      )}
 
       <button
         onClick={handleBillPayment}

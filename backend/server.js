@@ -462,7 +462,7 @@ app.get("/wishlist", (req, res) => {
   res.json(wishlist);
 });
 
-// // 📦 MongoDB connection
+// 📦 MongoDB connection
 // const MONGO_URI = "mongodb+srv://karthik12:Karthik1234@cluster0.zi1bjbr.mongodb.net/target";
 
 // mongoose.connect(MONGO_URI, {
