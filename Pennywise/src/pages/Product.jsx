@@ -48,7 +48,6 @@ function ProductList() {
   const updateCustomTarget = (value) => {
     setCustomTarget(value);
     localStorage.setItem("customTarget", value);
-    // Optional: Send to backend here
     fetch("http://localhost:5000/target", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -61,28 +60,31 @@ function ProductList() {
   );
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 p-6">
+    <div className="flex flex-col md:flex-row gap-6 p-6 bg-black text-green-500">
       <div className="md:w-2/3">
         <input
           type="text"
           placeholder="Search product..."
-          className="border p-2 w-full mb-4 rounded"
+          className="border border-green-500 bg-black text-green-500 p-2 w-full mb-4 rounded"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredProducts.map((product) => (
-            <div key={product.id} className="bg-white shadow p-4 rounded">
+            <div
+              key={product.id}
+              className="bg-black shadow border border-green-500 p-4 rounded"
+            >
               <img
                 src={product.image}
                 alt={product.name}
                 className="w-full h-40 object-cover rounded-md mb-4"
               />
-              <h3 className="font-bold">{product.name}</h3>
+              <h3 className="font-bold text-green-500">{product.name}</h3>
               <p>₹{product.price}</p>
               <button
                 onClick={() => addToWishlist(product)}
-                className="mt-2 bg-blue-600 text-white px-3 py-1 rounded"
+                className="mt-2 bg-green-700 text-black px-3 py-1 rounded"
               >
                 Add to Wishlist
               </button>
