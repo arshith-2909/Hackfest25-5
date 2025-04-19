@@ -27,7 +27,7 @@ const DetailsForm = () => {
       }, { merge: true });
 
       alert("Details saved successfully!");
-      navigate("/game"); // or dashboard
+      navigate("/dashboard"); // or dashboard
     } catch (err) {
       console.error("Error saving details:", err);
     }

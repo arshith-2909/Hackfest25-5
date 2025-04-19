@@ -37,7 +37,7 @@ const App = () => {
       {/* ✅ add this route */}
         <Route path="/dashboard" element={<Dashboard />} /> {/* ✅ add this route */}
         <Route path="/details-form" element={<DetailsForm />} /> {/* ✅ add this route */}
-        <Route path="/Login" element={<Login setUser={setUser} />} /> {/* ✅ pass setUser here */}
+        <Route path="/" element={<Login setUser={setUser} />} /> {/* ✅ pass setUser here */}
 
         <Route path="/ad" element={<Ad />} />
         <Route path="/chatbot" element={<Chatbot />} />
