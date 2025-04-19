@@ -1,72 +1,111 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 const Booking = () => {
-  const [amount, setAmount] = useState('');
-  const [bookingType, setBookingType] = useState('flight');
-  const [spareChange, setSpareChange] = useState(null);
+  const [category, setCategory] = useState("gas");
+  const [amount, setAmount] = useState("");
+  const [spareChange, setSpareChange] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [bookingData, setBookingData] = useState(null);
   const [spareEnabled, setSpareEnabled] = useState(true);
+
+  const handleAmountChange = (e) => {
+    const val = parseFloat(e.target.value) || 0;
+    setAmount(val);
+    updateSpare(val, spareEnabled);
+  };
+
+  const updateSpare = (amt, isEnabled) => {
+    if (isEnabled) {
+      const spare = parseFloat((amt * 0.02).toFixed(2));
+      setSpareChange(spare);
+      setTotalAmount(amt + spare);
+    } else {
+      setSpareChange(0);
+      setTotalAmount(amt);
+    }
+  };
+
+  const toggleSpare = () => {
+    const newStatus = !spareEnabled;
+    setSpareEnabled(newStatus);
+    updateSpare(amount, newStatus);
+  };
 
   const handleBooking = async () => {
     try {
-      const res = await axios.post("http://localhost:5002/api/transaction", {
-        amount: parseFloat(amount),
-        type: "booking",
-        spareEnabled,
-        details: bookingType
+      const res = await axios.post("http://localhost:5000/api/book", {
+        category,
+        amount,
+        spareChange,
+        totalAmount,
       });
-      setSpareChange(res.data.spareChange);
-      setAmount('');
+      setBookingData(res.data);
+      alert("✅ Booking successful!");
     } catch (err) {
-      console.error("Booking failed:", err);
+      alert("❌ Booking failed");
+      console.error(err);
     }
   };
 
   return (
-    <div className="bg-white p-4 rounded shadow-md">
-      <h2 className="text-xl font-semibold mb-3">Booking</h2>
-      
-      <div className="mb-2">
-        <label className="block text-sm mb-1">Select Booking Type:</label>
-        <select
-          value={bookingType}
-          onChange={(e) => setBookingType(e.target.value)}
-          className="border p-2 rounded w-full"
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-xl shadow-md">
+      <h2 className="text-2xl font-bold mb-4">🚀 Make a Booking</h2>
+
+      <label className="block mb-2 font-medium">Category:</label>
+      <select
+        className="w-full mb-4 p-2 border rounded"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+      >
+        <option value="gas">Gas</option>
+        <option value="bus">Bus</option>
+        <option value="flight">Flight</option>
+        <option value="biking">Biking</option>
+      </select>
+
+      <label className="block mb-2 font-medium">Enter Amount:</label>
+      <input
+        type="number"
+        className="w-full mb-4 p-2 border rounded"
+        value={amount}
+        onChange={handleAmountChange}
+      />
+
+      <div className="mb-4 flex items-center justify-between">
+        <p>
+          🧾 Spare Change (2%): <strong>₹{spareChange}</strong>
+        </p>
+        <button
+          onClick={toggleSpare}
+          className={`text-sm px-2 py-1 rounded ${
+            spareEnabled
+              ? "bg-red-100 text-red-700 hover:bg-red-200"
+              : "bg-green-100 text-green-700 hover:bg-green-200"
+          }`}
         >
-          <option value="flight">Flight</option>
-          <option value="gas">Gas</option>
-          <option value="hotel">Hotel</option>
-          <option value="bus">Bus</option>
-          <option value="train">Train</option>
-        </select>
+          {spareEnabled ? "Cancel Spare" : "Enable Spare"}
+        </button>
       </div>
 
-      <div className="mb-2">
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          className="border p-2 w-full"
-          placeholder="Enter amount"
-        />
-      </div>
+      <p className="mb-4">
+        💳 Total Payable Amount: <strong>₹{totalAmount}</strong>
+      </p>
 
-      <div className="mb-2 flex items-center space-x-2">
-        <input
-          type="checkbox"
-          checked={spareEnabled}
-          onChange={() => setSpareEnabled(!spareEnabled)}
-        />
-        <label>Enable Spare Change</label>
-      </div>
-
-      <button onClick={handleBooking} className="bg-blue-600 text-white px-4 py-2 rounded w-full">
-        Confirm Booking
+      <button
+        onClick={handleBooking}
+        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+      >
+        Confirm & Pay ₹{totalAmount}
       </button>
 
-      {spareChange !== null && (
-        <div className="mt-3 text-green-600 text-sm">
-          Spare Change Added: ₹{spareChange}
+      {bookingData && (
+        <div className="mt-6 p-4 bg-gray-100 rounded">
+          <h3 className="font-semibold text-lg mb-2">✅ Booking Summary</h3>
+          <p>🗂 Category: {bookingData.category}</p>
+          <p>💰 Original Amount: ₹{bookingData.amount}</p>
+          <p>💸 Spare Change: ₹{bookingData.spareChange}</p>
+          <p>💳 Total Paid: ₹{bookingData.totalAmount}</p>
         </div>
       )}
     </div>

@@ -651,6 +651,78 @@ app.get("/transactions", async (req, res) => {
   }
 });
 
+
+
+
+
+// ✅ Create separate DB connection for bookings
+const bookingDB = mongoose.createConnection("mongodb://localhost:27017/bookingApp", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// ✅ Define Booking schema and model inside the connection
+const bookingSchema = new mongoose.Schema({
+  category: {
+    type: String,
+    enum: ["gas", "bus", "flight", "biking"],
+    required: true,
+  },
+  amount: Number,
+  spareChange: Number,
+  totalAmount: Number,
+  status: String,
+});
+
+const Booking = bookingDB.model("Booking", bookingSchema);
+
+// ✅ Book API
+app.post("/api/book", async (req, res) => {
+  try {
+    const { category, amount } = req.body;
+
+    const spareChange = parseFloat((amount * 0.02).toFixed(2));
+    const totalAmount = amount + spareChange;
+
+    const booking = new Booking({
+      category,
+      amount,
+      spareChange,
+      totalAmount,
+      status: "Booked",
+    });
+
+    await booking.save();
+    res.status(201).json(booking);
+  } catch (error) {
+    console.error("Booking Error:", error);
+    res.status(500).json({ error: "Booking failed" });
+  }
+});
+
+// ✅ Cancel spare change API
+app.post("/api/cancel", async (req, res) => {
+  try {
+    const { bookingId } = req.body;
+
+    const booking = await Booking.findById(bookingId);
+    if (!booking) {
+      return res.status(404).json({ error: "Booking not found" });
+    }
+
+    booking.totalAmount -= booking.spareChange;
+    booking.spareChange = 0;
+    booking.status = "Spare Change Canceled";
+
+    await booking.save();
+    res.json(booking);
+  } catch (error) {
+    console.error("Cancel Error:", error);
+    res.status(500).json({ error: "Cancel failed" });
+  }
+});
+
+
 // ----------------- Start Server ------------------
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
