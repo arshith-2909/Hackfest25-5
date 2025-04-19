@@ -48,8 +48,26 @@ const features = [
     title: "Purchase and Set Target",
     description: "Set your savings goals and start purchasing smartly.",
     buttonText: "Explore",
-    bgColor: "bg-white",
+    bgColor: "bg-purple-200",
     route: "/product",
+  }, {
+    title: "Wasting Money? Ah Want to see Unused App",
+    description: "Set your savings goals and start purchasing smartly.",
+    buttonText: "Explore",
+    bgColor: "bg-white-900",
+    route: "/unused-subscription",
+  },{
+    title: "Transaction Detail",
+    description: "Set your savings goals and start purchasing smartly.",
+    buttonText: "Explore",
+    bgColor: "bg-blue-200",
+    route: "/unused-subscription",
+  },{
+    title: "All Expenses of This Month",
+    description: "Set your savings goals and start purchasing smartly.",
+    buttonText: "Explore",
+    bgColor: "bg-orange-100",
+    route: "/unused-subscription",
   },
 ];
 
