@@ -43,7 +43,7 @@ const features = [
     route: "/recommend",
   },
   {
-    title: "Recommend",
+    title: "Recommend?",
     description: "Get intelligent suggestions for better choices.",
     buttonText: "Explore",
     route: "/chatbot",
@@ -66,6 +66,13 @@ const features = [
     buttonText: "Play Now",
     route: "/game",
   },
+   {
+    title: "Your Future Spending",
+    description: "Know your future spending and plan accordingly.",
+    buttonText: "Explore",
+    route: "/savings",
+  },
+  
   {
     title: "Unused Subscriptions",
     description: "Identify and cancel unused subscriptions.",

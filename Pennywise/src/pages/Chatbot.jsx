@@ -23,7 +23,7 @@ const Chatbot = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/chat", {
+      const res = await fetch("http://localhost:5006/chat", { // Updated port to 5006
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input.trim() }),
@@ -91,6 +91,7 @@ const Chatbot = () => {
         <button
           className="bg-[#34C759] text-white px-4 py-2 rounded-full shadow hover:bg-green-700 transition"
           onClick={handleSend}
+          disabled={loading} // Disable button while loading
         >
           Send
         </button>

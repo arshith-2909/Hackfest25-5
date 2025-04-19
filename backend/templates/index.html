@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Monthly Savings Predictor</title>
+</head>
+<body>
+  <h1>Predict Your Monthly Savings</h1>
+  <form method="post">
+    <h3>Salary</h3>
+    <input type="number" step="any" name="salary" required>
+
+    <h3>This Month's Spending</h3>
+    <input type="number" step="any" name="this_recharge" placeholder="Recharge" required>
+    <input type="number" step="any" name="this_food" placeholder="Food" required>
+    <input type="number" step="any" name="this_grocery" placeholder="Grocery" required>
+    <input type="number" step="any" name="this_bills" placeholder="Bills" required>
+
+    <h3>Last Month's Spending</h3>
+    <input type="number" step="any" name="last_recharge" placeholder="Recharge" required>
+    <input type="number" step="any" name="last_food" placeholder="Food" required>
+    <input type="number" step="any" name="last_grocery" placeholder="Grocery" required>
+    <input type="number" step="any" name="last_bills" placeholder="Bills" required>
+
+    <br><br>
+    <input type="submit" value="Predict Savings">
+  </form>
+
+  {% if error %}
+    <p style="color:red;">Error: {{ error }}</p>
+  {% endif %}
+
+  {% if report %}
+    <h2>Prediction Report:</h2>
+    <pre>{{ report }}</pre>
+  {% endif %}
+</body>
+</html>

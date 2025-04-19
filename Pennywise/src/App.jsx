@@ -29,6 +29,10 @@ import Profile from "./pages/Profile";
 import TransactionDetails from "./pages/History";
 
 
+
+
+
+import SavingsForm from "./pages/SavingsForm";
 import "./App.css";
 
 
@@ -63,7 +67,7 @@ const App = () => {
         <Route path="/wishlist" element={<WishList />} />
         <Route path="/recharge" element={<Recharge />} />
         <Route path="/transaction" element={<Transaction/>}/>
-        
+        <Route path="/savings" element={<SavingsForm />} />
 
        
       </Routes>
