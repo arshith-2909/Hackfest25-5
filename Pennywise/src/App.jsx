@@ -39,7 +39,7 @@ const App = () => {
     <Router>
       <Routes>
       {/* ✅ add this route */}
-      <Route path="/transaction-details" element={<TransactionDetails />} /> {/* ✅ add this route */}
+      <Route path="/history" element={<TransactionDetails />} /> {/* ✅ add this route */}
         <Route path="/profile" element={<Profile />} /> {/* ✅ add this route */}
         <Route path="/dashboard" element={<Dashboard />} /> {/* ✅ add this route */}
         <Route path="/details-form" element={<DetailsForm />} /> {/* ✅ add this route */}

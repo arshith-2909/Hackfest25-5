@@ -93,12 +93,7 @@ const DashboardSection = () => {
               >
                 Profile
               </li>
-              <li
-                className="px-4 py-2 hover:bg-gray-700 cursor-pointer"
-                onClick={() => navigate("/settings")}
-              >
-                Settings
-              </li>
+              
               <li
                 className="px-4 py-2 hover:bg-gray-700 cursor-pointer"
                 onClick={() => navigate("/")}
@@ -114,8 +109,8 @@ const DashboardSection = () => {
       </div>
 
       <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-5xl font-bold text-[#34C759] mb-6">
-          Interactive Financial Dashboard
+        <h2 className="text-5xl font-bold text-[#34C759] mb-6 animate-pulse">
+          PayVest
         </h2>
         <p className="text-lg text-gray-300 mb-12">
           Manage your finances effectively and achieve your goals.
