@@ -8,11 +8,10 @@ const Recharge = () => {
   const [spareChangeEnabled, setSpareChangeEnabled] = useState(true);
   const [spareChange, setSpareChange] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
-<<<<<<< HEAD
+
   const [sparePercentage, setSparePercentage] = useState(0.02); // Default 2%
-=======
   const [loading, setLoading] = useState(false);
->>>>>>> a1ce06147b4158dc12ccf5c665d30e3605aeece1
+
 
   useEffect(() => {
     const storedSpare = localStorage.getItem("userSpareChange");
