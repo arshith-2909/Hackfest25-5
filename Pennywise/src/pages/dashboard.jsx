@@ -149,43 +149,9 @@ const DashboardSection = () => {
 
         {/* Progress Visualizations */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
-          <div className="bg-black rounded-xl p-6 shadow-[0_0_20px_5px_rgba(52,199,89,0.25)] flex flex-col items-center justify-center border-[1px] border-[#355E3B]">
-            <h3 className="text-lg font-semibold text-white mb-4">
-              Savings Progress
-            </h3>
-            <div className="w-full flex justify-center items-center">
-              <div className="w-48 h-48">
-                <CircularProgressbar
-                  value={75}
-                  text={`${75}%`}
-                  styles={buildStyles({
-                    pathColor: "#FFFFFF",
-                    textColor: "#FFFFFF",
-                    trailColor: "#333333",
-                    strokeLinecap: "round",
-                  })}
-                />
-              </div>
-            </div>
-          </div>
+        
 
-          <div className="bg-black rounded-xl p-6 shadow-[0_0_20px_5px_rgba(52,199,89,0.25)] flex flex-col items-center justify-center border-[1px] border-[#355E3B]">
-            <h3 className="text-lg font-semibold text-white mb-4">
-              Monthly Expenses
-            </h3>
-            <div className="h-40 w-full flex items-center justify-center text-gray-600">
-              {/* Bar Graph Placeholder */}
-            </div>
-          </div>
-
-          <div className="bg-black rounded-xl p-6 shadow-[0_0_20px_5px_rgba(52,199,89,0.25)] flex flex-col items-center justify-center border-[1px] border-[#355E3B]">
-            <h3 className="text-lg font-semibold text-white mb-4">
-              Transaction Detail
-            </h3>
-            <div className="h-40 w-full flex items-center justify-center text-gray-600">
-              {/* Line Graph Placeholder */}
-            </div>
-          </div>
+          
         </div>
       </div>
     </section>
