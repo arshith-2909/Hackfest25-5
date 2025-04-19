@@ -35,7 +35,7 @@ const features = [
     title: "Invest",
     description: "Grow your savings with smart investment options.",
     buttonText: "Start Investing",
-    route: "/invest",
+    route: "/recommend",
   },
   {
     title: "Recommend",
