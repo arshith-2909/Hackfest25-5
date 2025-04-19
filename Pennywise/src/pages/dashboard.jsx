@@ -26,7 +26,7 @@ const features = [
     route: "/recharge",
   },
   {
-    title: "Social",
+    title: "Social Connect",
     description: "Engage with the community and share updates.",
     buttonText: "Join Now",
     route: "/social-invest",
