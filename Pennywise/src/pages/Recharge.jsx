@@ -8,6 +8,7 @@ const Recharge = () => {
   const [spareChangeEnabled, setSpareChangeEnabled] = useState(true);
   const [spareChange, setSpareChange] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleSpareChangeToggle = (enabled) => {
     const amt = parseFloat(amount);
@@ -45,6 +46,7 @@ const Recharge = () => {
   const email = localStorage.getItem("userEmail");
 
   const handleRecharge = async () => {
+    setLoading(true);
     try {
       await axios.post("http://localhost:5000/api/book", {
         email,
@@ -57,18 +59,35 @@ const Recharge = () => {
     } catch (err) {
       console.error("Recharge failed:", err);
       alert("❌ Something went wrong!");
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (loading) {
+    return (
+      <div className="max-w-2xl mx-auto p-6 mt-10 rounded-xl bg-[#000000] text-white border border-[#355E3B] border-[1px] shadow-[0_0_80px_10px_rgba(52,199,89,0.25)] animate-pulse">
+        <div className="h-6 bg-gray-600/30 rounded w-1/3 mb-6"></div>
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className="mb-4">
+            <div className="h-4 bg-gray-500/30 rounded w-1/4 mb-2"></div>
+            <div className="h-6 bg-gray-500/30 rounded w-full"></div>
+          </div>
+        ))}
+        <div className="h-10 bg-gray-500/30 rounded w-full mt-6"></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-[#1A1D23] rounded-xl shadow-md text-white">
-      <h2 className="text-2xl font-bold mb-4 text-[#34C759]">📲 Recharge</h2>
+    <div className="max-w-2xl mx-auto mt-10 p-6 rounded-xl bg-[#000000] text-white border border-[#355E3B] border-[1px] shadow-[0_0_80px_10px_rgba(52,199,89,0.25)]">
+      <h2 className="text-2xl font-bold mb-6 text-[#34C759]">📲 Recharge</h2>
 
       <label className="block mb-2 font-medium text-gray-300">Provider:</label>
       <select
         value={provider}
         onChange={(e) => setProvider(e.target.value)}
-        className="w-full mb-4 p-2 border rounded bg-[#2F3436] text-white"
+        className="w-full mb-4 px-3 py-2 border border-gray-600 rounded-md bg-[#1A1D23] text-white"
       >
         <option value="Jio">Jio</option>
         <option value="Airtel">Airtel</option>
@@ -81,7 +100,7 @@ const Recharge = () => {
         type="tel"
         value={mobile}
         onChange={(e) => setMobile(e.target.value)}
-        className="w-full mb-4 p-2 border rounded bg-[#2F3436] text-white"
+        className="w-full mb-4 px-3 py-2 border border-gray-600 rounded-md bg-[#1A1D23] text-white"
         placeholder="Enter mobile number"
       />
 
@@ -90,7 +109,7 @@ const Recharge = () => {
         type="number"
         value={amount}
         onChange={handleAmountChange}
-        className="w-full mb-4 p-2 border rounded bg-[#2F3436] text-white"
+        className="w-full mb-4 px-3 py-2 border border-gray-600 rounded-md bg-[#1A1D23] text-white"
         placeholder="e.g. 500"
       />
 
@@ -124,7 +143,8 @@ const Recharge = () => {
 
       <button
         onClick={handleRecharge}
-        className="w-full bg-[#34C759] text-white py-2 rounded hover:bg-green-700"
+        className="w-full bg-[#34C759] text-black py-2 rounded hover:bg-green-700 transition font-semibold"
+
       >
         Confirm & Pay ₹{totalAmount || 0}
       </button>
