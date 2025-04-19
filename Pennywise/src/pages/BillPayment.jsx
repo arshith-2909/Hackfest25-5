@@ -31,10 +31,11 @@ const BillPayment = () => {
     setSpareEnabled(newStatus);
     updateSpare(amount, newStatus);
   };
-
+  const email = localStorage.getItem("userEmail");
   const handleBillPayment = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/paybill", {
+      const res = await axios.post("http://localhost:5000/api/book", {
+        email,
         category,
         amount,
         spareChange,

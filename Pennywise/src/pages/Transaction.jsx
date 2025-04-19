@@ -31,11 +31,12 @@ const Transaction = () => {
     setSpareEnabled(newStatus);
     updateSpare(amount, newStatus);
   };
-
+  const email = localStorage.getItem("userEmail");
   const handleTransaction = async () => {
     try {
-      const res = await axios.post("http://localhost:5000/api/transaction", {
-        mobile,
+      const res = await axios.post("http://localhost:5000/api/book", {
+        email,
+        category: "transaction",
         amount,
         spareChange,
         totalAmount,

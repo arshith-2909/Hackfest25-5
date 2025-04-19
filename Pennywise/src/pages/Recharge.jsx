@@ -42,13 +42,13 @@ const Recharge = () => {
     setSpareChange(0);
     setTotalAmount(parseFloat(amount));
   };
-
+  const email = localStorage.getItem("userEmail");
   const handleRecharge = async () => {
     try {
-      await axios.post("http://localhost:5000/save-recharge", {
-        mobile,
-        provider,
-        enteredAmount: amount,
+      await axios.post("http://localhost:5000/api/book", {
+       email,
+        category: "recharge",
+        amount,
         spareChange,
         totalAmount,
       });

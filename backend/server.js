@@ -513,18 +513,18 @@ app.get("/wishlist", (req, res) => {
 
 
 // ✅ Connect to MongoDB
-mongoose.connect("mongodb+srv://karthik12:Karthik1234@cluster0.zi1bjbr.mongodb.net/target", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// mongoose.connect("mongodb+srv://karthik12:Karthik1234@cluster0.zi1bjbr.mongodb.net/target", {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
 
-// ✅ Target Schema (has email + amount)
-const targetSchema = new mongoose.Schema({
-  email: { type: String, required: true },
-  amount: { type: Number, required: true },
-});
+// // ✅ Target Schema (has email + amount)
+// const targetSchema = new mongoose.Schema({
+//   email: { type: String, required: true },
+//   amount: { type: Number, required: true },
+// });
 
-const Target = mongoose.model("Target", targetSchema);
+// const Target = mongoose.model("Target", targetSchema);
 
 // ✅ Save or Update target
 app.post("/api/target", async (req, res) => {
@@ -566,77 +566,77 @@ app.get("/api/target/:email", async (req, res) => {
 });
 
 
-const Razorpay = require("razorpay");
+// const Razorpay = require("razorpay");
 
 
 
 // ✅ Recharge DB (separate connection)
-const rechargeConnection = mongoose.createConnection(
-  "mongodb+srv://karthik12:Karthik1234@cluster0.zi1bjbr.mongodb.net/rechargeDB",
-  {
-    useNewUrlParser: true,
-  }
-);
+// const rechargeConnection = mongoose.createConnection(
+//   "mongodb+srv://karthik12:Karthik1234@cluster0.zi1bjbr.mongodb.net/rechargeDB",
+//   {
+//     useNewUrlParser: true,
+//   }
+// );
 
-rechargeConnection.once("open", () =>
-  console.log("✅ Connected to Recharge DB")
-);
+// rechargeConnection.once("open", () =>
+//   console.log("✅ Connected to Recharge DB")
+// );
 
-// ✅ Transaction Schema + Model (using separate connection)
-const transactionSchema = new mongoose.Schema({
-  amount: Number,
-  paymentId: String,
-  orderId: String,
-  status: String,
-  date: { type: Date, default: Date.now },
-});
+// // ✅ Transaction Schema + Model (using separate connection)
+// const transactionSchema = new mongoose.Schema({
+//   amount: Number,
+//   paymentId: String,
+//   orderId: String,
+//   status: String,
+//   date: { type: Date, default: Date.now },
+// });
 
-const Transaction = rechargeConnection.model("Transaction", transactionSchema);
+// const Transaction = rechargeConnection.model("Transaction", transactionSchema);
 
-// ✅ Razorpay setup
-const razorpay = new Razorpay({
-  key_id: "rzp_test_324CoSO7L2dLSO",
-  key_secret: "CngumTuOFvI2Qc7AhxNuZBWX",
-});app.post('/create-order', async (req, res) => {
-  try {
-    console.log("Received request body:", req.body);  // Add this line to log the request body
-    const { amount } = req.body;
+// // ✅ Razorpay setup
+// const razorpay = new Razorpay({
+//   key_id: "rzp_test_324CoSO7L2dLSO",
+//   key_secret: "CngumTuOFvI2Qc7AhxNuZBWX",
+// });app.post('/create-order', async (req, res) => {
+//   try {
+//     console.log("Received request body:", req.body);  // Add this line to log the request body
+//     const { amount } = req.body;
 
-    if (!amount) {
-      console.log("Amount is missing!");
-      return res.status(400).json({ error: 'Amount is required' });
-    }
+//     if (!amount) {
+//       console.log("Amount is missing!");
+//       return res.status(400).json({ error: 'Amount is required' });
+//     }
 
-    const order = await razorpay.orders.create({
-      amount: amount * 100,
-      currency: 'INR',
-      receipt: `receipt_order_${Math.random().toString(36).substr(2, 9)}`,
-    });
+//     const order = await razorpay.orders.create({
+//       amount: amount * 100,
+//       currency: 'INR',
+//       receipt: `receipt_order_${Math.random().toString(36).substr(2, 9)}`,
+//     });
 
-    console.log("Razorpay order created:", order);
-    res.json(order);
-  } catch (error) {
-    console.error("Error creating Razorpay order:", error);  // More detailed error logging
-    res.status(500).json({ error: 'Payment failed', message: error.message });
-  }
-});
-app.post("/save-recharge", async (req, res) => {
-  const { mobile, provider, enteredAmount, spareChange, totalAmount } = req.body;
-  try {
-    const conn = await mongoose.createConnection(MONGO_URI).asPromise();
-    const Recharge = conn.model("Recharge", new mongoose.Schema({
-      mobile: String,
-      provider: String,
-      enteredAmount: Number,
-      spareChange: Number,
-      totalAmount: Number,
-    }));
-    await Recharge.create({ mobile, provider, enteredAmount, spareChange, totalAmount });
-    res.send({ success: true });
-  } catch (err) {
-    res.status(500).send({ error: "Recharge save failed" });
-  }
-});
+//     console.log("Razorpay order created:", order);
+//     res.json(order);
+//   } catch (error) {
+//     console.error("Error creating Razorpay order:", error);  // More detailed error logging
+//     res.status(500).json({ error: 'Payment failed', message: error.message });
+//   }
+// });
+// app.post("/save-recharge", async (req, res) => {
+//   const { mobile, provider, enteredAmount, spareChange, totalAmount } = req.body;
+//   try {
+//     const conn = await mongoose.createConnection(MONGO_URI).asPromise();
+//     const Recharge = conn.model("Recharge", new mongoose.Schema({
+//       mobile: String,
+//       provider: String,
+//       enteredAmount: Number,
+//       spareChange: Number,
+//       totalAmount: Number,
+//     }));
+//     await Recharge.create({ mobile, provider, enteredAmount, spareChange, totalAmount });
+//     res.send({ success: true });
+//   } catch (err) {
+//     res.status(500).send({ error: "Recharge save failed" });
+//   }
+// });
 
 
 // ✅ Save Transaction to MongoDB
@@ -673,93 +673,137 @@ app.get("/transactions", async (req, res) => {
 
 
 
-// ✅ Create separate DB connection for bookings
-const bookingDB = mongoose.createConnection("mongodb://localhost:27017/bookingApp", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
-// ✅ Define Booking schema and model inside the connection
+
+
+
+// ✅ Book API
+// app.post("/api/book", async (req, res) => {
+//   try {
+//     const { category, amount } = req.body;
+
+//     const spareChange = parseFloat((amount * 0.02).toFixed(2));
+//     const totalAmount = amount + spareChange;
+
+//     const booking = new Booking({
+//       category,
+//       amount,
+//       spareChange,
+//       totalAmount,
+//       status: "Booked",
+//     });
+
+//     await booking.save();
+//     res.status(201).json(booking);
+//   } catch (error) {
+//     console.error("Booking Error:", error);
+//     res.status(500).json({ error: "Booking failed" });
+//   }
+// });
+
+// // ✅ Cancel spare change API
+// app.post("/api/cancel", async (req, res) => {
+//   try {
+//     const { bookingId } = req.body;
+
+//     const booking = await Booking.findById(bookingId);
+//     if (!booking) {
+//       return res.status(404).json({ error: "Booking not found" });
+//     }
+
+//     booking.totalAmount -= booking.spareChange;
+//     booking.spareChange = 0;
+//     booking.status = "Spare Change Canceled";
+
+//     await booking.save();
+//     res.json(booking);
+//   } catch (error) {
+//     console.error("Cancel Error:", error);
+//     res.status(500).json({ error: "Cancel failed" });
+//   }
+// });
+
+
+
+// app.post("/api/transaction", async (req, res) => {
+//   try {
+//     const { mobile, amount, spareChange, totalAmount } = req.body;
+//     const db = await createConnection();
+//     const collection = db.collection("transactions");
+
+//     const result = await collection.insertOne({
+//       mobile,
+//       amount,
+//       spareChange,
+//       totalAmount,
+//       createdAt: new Date(),
+//     });
+
+//     res.status(200).json({ mobile, amount, spareChange, totalAmount });
+//   } catch (err) {
+//     console.error("Transaction error:", err);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
+mongoose.connect("mongodb+srv://karthik12:Karthik1234@cluster0.zi1bjbr.mongodb.net/spareDB?retryWrites=true&w=majority", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log("✅ Connected to MongoDB"))
+.catch((err) => console.error("❌ MongoDB connection failed:", err));
+
+// 📦 Mongoose Schema
 const bookingSchema = new mongoose.Schema({
-  category: {
-    type: String,
-    enum: ["gas", "bus", "flight", "biking"],
-    required: true,
-  },
+  email: { type: String, required: true, unique: true }, // Make email unique
+  category: String,
   amount: Number,
   spareChange: Number,
   totalAmount: Number,
-  status: String,
+  createdAt: { type: Date, default: Date.now }
 });
 
-const Booking = bookingDB.model("Booking", bookingSchema);
+const Booking = mongoose.model("Booking", bookingSchema);
 
-// ✅ Book API
+// 📩 Route to handle booking POST request
+// 📩 Route to handle booking POST request
 app.post("/api/book", async (req, res) => {
+  const { email, category, amount, spareChange, totalAmount } = req.body;
+
+  if (!email) return res.status(400).json({ error: "Email is required" });
+
   try {
-    const { category, amount } = req.body;
+    // Check if booking already exists for the email
+    const existingBooking = await Booking.findOne({ email });
 
-    const spareChange = parseFloat((amount * 0.02).toFixed(2));
-    const totalAmount = amount + spareChange;
+    if (existingBooking) {
+      // Increment the spare change if email already exists
+      const updatedSpareChange = existingBooking.spareChange + spareChange;
+      const updatedTotalAmount = existingBooking.totalAmount + totalAmount;
 
-    const booking = new Booking({
+      // Update the document
+      existingBooking.spareChange = updatedSpareChange;
+      existingBooking.totalAmount = updatedTotalAmount;
+      existingBooking.category = category;  // Update category if needed
+      existingBooking.amount = amount;      // Update amount if needed
+
+      const updatedBooking = await existingBooking.save();
+      return res.status(200).json(updatedBooking);
+    }
+
+    // If email doesn't exist, create a new booking
+    const newBooking = new Booking({
+      email,
       category,
       amount,
       spareChange,
       totalAmount,
-      status: "Booked",
     });
+    const savedBooking = await newBooking.save();
 
-    await booking.save();
-    res.status(201).json(booking);
-  } catch (error) {
-    console.error("Booking Error:", error);
-    res.status(500).json({ error: "Booking failed" });
-  }
-});
-
-// ✅ Cancel spare change API
-app.post("/api/cancel", async (req, res) => {
-  try {
-    const { bookingId } = req.body;
-
-    const booking = await Booking.findById(bookingId);
-    if (!booking) {
-      return res.status(404).json({ error: "Booking not found" });
-    }
-
-    booking.totalAmount -= booking.spareChange;
-    booking.spareChange = 0;
-    booking.status = "Spare Change Canceled";
-
-    await booking.save();
-    res.json(booking);
-  } catch (error) {
-    console.error("Cancel Error:", error);
-    res.status(500).json({ error: "Cancel failed" });
-  }
-});
-
-
-
-app.post("/api/transaction", async (req, res) => {
-  try {
-    const { mobile, amount, spareChange, totalAmount } = req.body;
-    const db = await createConnection();
-    const collection = db.collection("transactions");
-
-    const result = await collection.insertOne({
-      mobile,
-      amount,
-      spareChange,
-      totalAmount,
-      createdAt: new Date(),
-    });
-
-    res.status(200).json({ mobile, amount, spareChange, totalAmount });
+    res.status(201).json(savedBooking);
   } catch (err) {
-    console.error("Transaction error:", err);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error saving booking:", err);
+    res.status(500).json({ error: "Failed to save booking" });
   }
 });
 
