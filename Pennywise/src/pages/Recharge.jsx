@@ -103,7 +103,7 @@ const Recharge = () => {
               handleSpareChangeToggle();
             }}
           />
-          <label>Enable Spare Change (2%)</label>
+          <label>Disable Spare Change (2%)</label>
         </div>
 
         {spareChangeEnabled && (
