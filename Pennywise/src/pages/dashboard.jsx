@@ -24,6 +24,11 @@ const features = [
     description: "Recharge mobile, DTH, and FASTag effortlessly.",
     buttonText: "Recharge",
     route: "/recharge",
+  },{
+    title: "Pay Contact",
+    description: "Pay Your Friend , Family, or any contact.          ",
+    buttonText: "Pay Contact",
+    route: "/transaction",
   },
   {
     title: "Social Connect",
