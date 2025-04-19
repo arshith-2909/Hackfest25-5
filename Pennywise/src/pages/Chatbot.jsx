@@ -6,9 +6,9 @@ const Chatbot = () => {
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
 
-  // Scroll to bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -20,9 +20,9 @@ const Chatbot = () => {
     setMessages((prev) => [...prev, newUserMsg]);
     setInput("");
     setIsTyping(true);
+    setLoading(true);
 
     try {
-      // 👉 Replace this with your API call (Flask/FastAPI)
       const res = await fetch("http://localhost:5000/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -41,6 +41,7 @@ const Chatbot = () => {
     }
 
     setIsTyping(false);
+    setLoading(false);
   };
 
   const handleKeyDown = (e) => {
@@ -48,39 +49,47 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen p-4 bg-gradient-to-b from-white to-blue-50">
-      <div className="flex-1 overflow-y-auto space-y-4 p-2">
+    <div className="max-w-2xl mx-auto p-6 mt-10 rounded-xl bg-[#000000] text-white border border-[#355E3B] border-[1px] shadow-[0_0_80px_10px_rgba(52,199,89,0.25)] flex flex-col h-[90vh]">
+      <h2 className="text-2xl font-bold mb-6 text-[#34C759]">💬 Chatbot</h2>
+
+      <div className="flex-1 overflow-y-auto space-y-4 p-2 custom-scrollbar">
         {messages.map((msg, index) => (
           <div
             key={index}
             className={`max-w-md px-4 py-2 rounded-2xl shadow ${
               msg.sender === "user"
-                ? "bg-blue-500 text-white self-end ml-auto"
-                : "bg-gray-200 text-black self-start mr-auto"
+                ? "bg-[#1A1D23] text-white self-end ml-auto"
+                : "bg-gray-800 text-white self-start mr-auto"
             }`}
           >
             {msg.text}
           </div>
         ))}
+
         {isTyping && (
-          <div className="self-start text-sm text-gray-500 animate-pulse px-4">
+          <div className="self-start text-sm text-[#34C759] animate-pulse px-4">
             Typing...
           </div>
         )}
+
+        {loading && (
+          <div className="p-4 rounded-md bg-gray-600/30 animate-pulse w-1/2 h-6 my-2"></div>
+        )}
+
         <div ref={bottomRef} />
       </div>
 
       <div className="mt-4 flex items-center gap-2">
         <input
           type="text"
-          className="flex-1 rounded-full border px-4 py-2 outline-none shadow-sm"
+          className="flex-1 rounded-full border border-gray-600 px-4 py-2 bg-[#1A1D23] text-white shadow-sm outline-none focus:ring-2 focus:ring-[#34C759]"
           placeholder="Type a message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
         />
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-full shadow hover:bg-blue-600"
+          className="bg-[#34C759] text-white px-4 py-2 rounded-full shadow hover:bg-green-700 transition"
           onClick={handleSend}
         >
           Send
