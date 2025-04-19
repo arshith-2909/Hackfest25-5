@@ -26,7 +26,7 @@ import Transaction from "./pages/Transaction";
 
 import Profile from "./pages/Profile";
 
-
+import "./App.css";
 
 const App = () => {
   const [user, setUser] = useState(null); // 👈 add this
