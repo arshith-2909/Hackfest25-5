@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Booking = () => {
@@ -8,6 +8,17 @@ const Booking = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [bookingData, setBookingData] = useState(null);
   const [spareEnabled, setSpareEnabled] = useState(true);
+  const [sparePercentage, setSparePercentage] = useState(0.02); // Default to 2%
+
+  // Fetch spareChangePercentage from localStorage on component mount
+  useEffect(() => {
+    const storedSparePercentage = localStorage.getItem("spareChangePercentage");
+    if (storedSparePercentage && !isNaN(storedSparePercentage)) {
+      setSparePercentage(parseFloat(storedSparePercentage));
+    } else {
+      console.log("Invalid or no spareChangePercentage found in localStorage, using default 0.02");
+    }
+  }, []);
 
   const handleAmountChange = (e) => {
     const val = parseFloat(e.target.value) || 0;
@@ -17,7 +28,7 @@ const Booking = () => {
 
   const updateSpare = (amt, isEnabled) => {
     if (isEnabled) {
-      const spare = parseFloat((amt * 0.02).toFixed(2));
+      const spare = parseFloat((amt *sparePercentage/100).toFixed(2));
       setSpareChange(spare);
       setTotalAmount(amt + spare);
     } else {
@@ -33,6 +44,7 @@ const Booking = () => {
   };
 
   const email = localStorage.getItem("userEmail");
+
   const handleBooking = async () => {
     try {
       const res = await axios.post("http://localhost:5000/api/book", {
@@ -76,7 +88,7 @@ const Booking = () => {
 
       <div className="mb-4 flex items-center justify-between">
         <p className="text-gray-300">
-          🧾 Spare Change (2%): <strong className="text-white">₹{spareChange}</strong>
+          🧾 Spare Change ({(sparePercentage ).toFixed(0)}%): <strong className="text-white">₹{spareChange}</strong>
         </p>
         <button
           onClick={toggleSpare}

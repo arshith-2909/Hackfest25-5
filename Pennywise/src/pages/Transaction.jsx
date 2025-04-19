@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Transaction = () => {
@@ -8,16 +8,31 @@ const Transaction = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [transData, setTransData] = useState(null);
   const [spareEnabled, setSpareEnabled] = useState(true);
+  const [sparePercentage, setSparePercentage] = useState(0.02); // Default to 2%
 
+  // Retrieve spareChange percentage from localStorage on mount
+  useEffect(() => {
+    const storedSparePercentage = localStorage.getItem("userSpareChange");
+
+    // Check if the value is valid and is a number
+    if (storedSparePercentage && !isNaN(storedSparePercentage)) {
+      setSparePercentage(parseFloat(storedSparePercentage)); // Update spare percentage if valid
+    } else {
+      console.log("Invalid or no spareChangePercentage found in localStorage, using default value 0.02");
+    }
+  }, []);
+
+  // Handle input change for amount
   const handleAmountChange = (e) => {
     const val = parseFloat(e.target.value) || 0;
     setAmount(val);
     updateSpare(val, spareEnabled);
   };
 
+  // Update spare change and total amount
   const updateSpare = (amt, isEnabled) => {
     if (isEnabled) {
-      const spare = parseFloat((amt * 0.02).toFixed(2));
+      const spare = parseFloat((amt * sparePercentage/100).toFixed(2));
       setSpareChange(spare);
       setTotalAmount(amt + spare);
     } else {
@@ -26,12 +41,17 @@ const Transaction = () => {
     }
   };
 
+  // Toggle spare change calculation
   const toggleSpare = () => {
     const newStatus = !spareEnabled;
     setSpareEnabled(newStatus);
     updateSpare(amount, newStatus);
   };
+
+  // Fetch user email from localStorage
   const email = localStorage.getItem("userEmail");
+
+  // Handle transaction
   const handleTransaction = async () => {
     try {
       const res = await axios.post("http://localhost:5000/api/book", {
@@ -72,7 +92,7 @@ const Transaction = () => {
 
       <div className="mb-4 flex items-center justify-between">
         <p>
-          🧾 Spare Change (2%): <strong>₹{spareChange}</strong>
+          🧾 Spare Change ({(sparePercentage ).toFixed(0)}%): <strong>₹{spareChange}</strong>
         </p>
         <button
           onClick={toggleSpare}
