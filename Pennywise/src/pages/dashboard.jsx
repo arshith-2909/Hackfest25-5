@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const features = [
   {
@@ -6,40 +7,73 @@ const features = [
     description: "Easily book appointments, travel, or events with just a click.",
     buttonText: "Book Now",
     bgColor: "bg-blue-100",
+    route: "/booking",
   },
   {
     title: "💳 Bill Payment",
     description: "Pay electricity, water, gas, and broadband bills securely.",
     buttonText: "Pay Bills",
     bgColor: "bg-yellow-100",
+    route: "/bill-payment",
   },
   {
     title: "🔌 Recharge",
     description: "Recharge your mobile, DTH, and FASTag instantly and safely.",
     buttonText: "Recharge",
     bgColor: "bg-green-100",
+    route: "/recharge",
   },
   {
     title: "💬 Social",
     description: "Engage with the GoPushti community and share updates.",
     buttonText: "Join Now",
     bgColor: "bg-pink-100",
+    route: "/social-invest",
   },
   {
     title: "📊 Invest",
     description: "Grow your savings with smart, guided investment options.",
     buttonText: "Start Investing",
     bgColor: "bg-purple-100",
+    route: "/recommend",
   },
   {
     title: "🤖 Recommend",
     description: "Get intelligent suggestions tailored just for you.",
     buttonText: "Explore",
-    bgColor: "bg-gray-100",
+    bgColor: "bg-gray-200",
+    route: "/chatbot",
+  },
+  {
+    title: "Purchase and Set Target",
+    description: "Set your savings goals and start purchasing smartly.",
+    buttonText: "Explore",
+    bgColor: "bg-purple-200",
+    route: "/product",
+  }, {
+    title: "Wasting Money? Ah Want to see Unused App",
+    description: "Set your savings goals and start purchasing smartly.",
+    buttonText: "Explore",
+    bgColor: "bg-white-900",
+    route: "/unused-subscription",
+  },{
+    title: "Transaction Detail",
+    description: "Set your savings goals and start purchasing smartly.",
+    buttonText: "Explore",
+    bgColor: "bg-blue-200",
+    route: "/unused-subscription",
+  },{
+    title: "All Expenses of This Month",
+    description: "Set your savings goals and start purchasing smartly.",
+    buttonText: "Explore",
+    bgColor: "bg-orange-100",
+    route: "/unused-subscription",
   },
 ];
 
 const DashboardSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="bg-white py-16 px-6" id="dashboard">
       <div className="max-w-7xl mx-auto text-center">
@@ -58,7 +92,10 @@ const DashboardSection = () => {
                 {feature.title}
               </h3>
               <p className="text-gray-700 mb-4">{feature.description}</p>
-              <button className="bg-black text-white px-4 py-2 rounded hover:bg-gray-900 transition">
+              <button
+                onClick={() => navigate(feature.route)}
+                className="bg-black text-white px-4 py-2 rounded hover:bg-gray-900 transition"
+              >
                 {feature.buttonText}
               </button>
             </div>
