@@ -53,7 +53,7 @@ const features = [
     title: "Transaction Detail",
     description: "View detailed history of your transactions.",
     buttonText: "View Details",
-    route: "/transactions",
+    route: "/history",
   },
   {
     title: "Game",
