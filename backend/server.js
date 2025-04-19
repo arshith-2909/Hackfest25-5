@@ -723,6 +723,28 @@ app.post("/api/cancel", async (req, res) => {
 });
 
 
+
+app.post("/api/transaction", async (req, res) => {
+  try {
+    const { mobile, amount, spareChange, totalAmount } = req.body;
+    const db = await createConnection();
+    const collection = db.collection("transactions");
+
+    const result = await collection.insertOne({
+      mobile,
+      amount,
+      spareChange,
+      totalAmount,
+      createdAt: new Date(),
+    });
+
+    res.status(200).json({ mobile, amount, spareChange, totalAmount });
+  } catch (err) {
+    console.error("Transaction error:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 // ----------------- Start Server ------------------
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
