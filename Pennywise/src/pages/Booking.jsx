@@ -12,7 +12,7 @@ const Booking = () => {
 
   // Fetch spareChangePercentage from localStorage on component mount
   useEffect(() => {
-    const storedSparePercentage = localStorage.getItem("spareChangePercentage");
+    const storedSparePercentage = localStorage.getItem("userSpareChange");
     if (storedSparePercentage && !isNaN(storedSparePercentage)) {
       setSparePercentage(parseFloat(storedSparePercentage));
     } else {
@@ -28,7 +28,7 @@ const Booking = () => {
 
   const updateSpare = (amt, isEnabled) => {
     if (isEnabled) {
-      const spare = parseFloat((amt *sparePercentage/100).toFixed(2));
+      const spare = parseFloat((amt * sparePercentage/100).toFixed(2));
       setSpareChange(spare);
       setTotalAmount(amt + spare);
     } else {
@@ -88,7 +88,7 @@ const Booking = () => {
 
       <div className="mb-4 flex items-center justify-between">
         <p className="text-gray-300">
-          🧾 Spare Change ({(sparePercentage ).toFixed(0)}%): <strong className="text-white">₹{spareChange}</strong>
+          🧾 Spare Change ({(sparePercentage).toFixed(0)}%): <strong className="text-white">₹{spareChange}</strong>
         </p>
         <button
           onClick={toggleSpare}
