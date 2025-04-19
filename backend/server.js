@@ -620,6 +620,24 @@ const razorpay = new Razorpay({
     res.status(500).json({ error: 'Payment failed', message: error.message });
   }
 });
+app.post("/save-recharge", async (req, res) => {
+  const { mobile, provider, enteredAmount, spareChange, totalAmount } = req.body;
+  try {
+    const conn = await mongoose.createConnection(MONGO_URI).asPromise();
+    const Recharge = conn.model("Recharge", new mongoose.Schema({
+      mobile: String,
+      provider: String,
+      enteredAmount: Number,
+      spareChange: Number,
+      totalAmount: Number,
+    }));
+    await Recharge.create({ mobile, provider, enteredAmount, spareChange, totalAmount });
+    res.send({ success: true });
+  } catch (err) {
+    res.status(500).send({ error: "Recharge save failed" });
+  }
+});
+
 
 // ✅ Save Transaction to MongoDB
 app.post("/save-transaction", async (req, res) => {
