@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Recharge = () => {
@@ -8,15 +8,25 @@ const Recharge = () => {
   const [spareChangeEnabled, setSpareChangeEnabled] = useState(true);
   const [spareChange, setSpareChange] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
+
+  const [sparePercentage, setSparePercentage] = useState(0.02); // Default 2%
   const [loading, setLoading] = useState(false);
 
-  const handleSpareChangeToggle = (enabled) => {
-    const amt = parseFloat(amount);
-    if (!amt) return;
+
+  useEffect(() => {
+    const storedSpare = localStorage.getItem("userSpareChange");
+    if (storedSpare && !isNaN(storedSpare)) {
+      setSparePercentage(parseFloat(storedSpare));
+    } else {
+      console.log("Invalid or no spareChangePercentage found. Using default 2%");
+    }
+  }, []);
+
+  const updateSpare = (amt, enabled) => {
     if (enabled) {
-      const sc = +(amt * 0.02).toFixed(2);
-      setSpareChange(sc);
-      setTotalAmount(amt + sc);
+      const spare = parseFloat((amt * sparePercentage / 100).toFixed(2));
+      setSpareChange(spare);
+      setTotalAmount(amt + spare);
     } else {
       setSpareChange(0);
       setTotalAmount(amt);
@@ -24,23 +34,22 @@ const Recharge = () => {
   };
 
   const handleAmountChange = (e) => {
-    const amt = parseFloat(e.target.value);
+    const amt = parseFloat(e.target.value) || 0;
     setAmount(e.target.value);
-    if (!isNaN(amt)) {
-      handleSpareChangeToggle(spareChangeEnabled);
-    }
+    updateSpare(amt, spareChangeEnabled);
   };
 
   const handleCheckboxToggle = (e) => {
     const enabled = e.target.checked;
     setSpareChangeEnabled(enabled);
-    handleSpareChangeToggle(enabled);
+    const amt = parseFloat(amount) || 0;
+    updateSpare(amt, enabled);
   };
 
   const handleCancelSpareChange = () => {
     setSpareChangeEnabled(false);
     setSpareChange(0);
-    setTotalAmount(parseFloat(amount));
+    setTotalAmount(parseFloat(amount) || 0);
   };
 
   const email = localStorage.getItem("userEmail");
@@ -120,7 +129,7 @@ const Recharge = () => {
             checked={spareChangeEnabled}
             onChange={handleCheckboxToggle}
           />
-          <label>Enable Spare Change (2%)</label>
+          <label>Enable Spare Change ({(sparePercentage).toFixed(0)}%)</label>
         </div>
 
         {spareChangeEnabled && (

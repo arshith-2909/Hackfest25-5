@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import axios from "axios";
 
 const BillPayment = () => {
@@ -8,8 +8,21 @@ const BillPayment = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [paymentData, setPaymentData] = useState(null);
   const [spareEnabled, setSpareEnabled] = useState(true);
+<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
+=======
+   const [sparePercentage, setSparePercentage] = useState(0.02);
+ useEffect(() => {
+    const storedSparePercentage = localStorage.getItem("userSpareChange");
+>>>>>>> 174171a1af564b0b374ccf775d73111759255a85
 
+    // Check if the value is valid and is a number
+    if (storedSparePercentage && !isNaN(storedSparePercentage)) {
+      setSparePercentage(parseFloat(storedSparePercentage)); // Update spare percentage if valid
+    } else {
+      console.log("Invalid or no spareChangePercentage found in localStorage, using default value 0.02");
+    }
+  }, []);
   const handleAmountChange = (e) => {
     const val = parseFloat(e.target.value) || 0;
     setAmount(val);
@@ -18,7 +31,7 @@ const BillPayment = () => {
 
   const updateSpare = (amt, isEnabled) => {
     if (isEnabled) {
-      const spare = parseFloat((amt * 0.02).toFixed(2));
+      const spare = parseFloat((amt * sparePercentage/100).toFixed(2));
       setSpareChange(spare);
       setTotalAmount(amt + spare);
     } else {
@@ -105,7 +118,7 @@ const BillPayment = () => {
 
       <div className="mb-4 flex items-center justify-between">
         <p className="text-gray-300">
-          🧾 Spare Change (2%): <strong className="text-white">₹{spareChange}</strong>
+        🧾 Spare Change ({(sparePercentage).toFixed(0)}%): <strong>₹{spareChange}</strong>
         </p>
         <button
           onClick={toggleSpare}
