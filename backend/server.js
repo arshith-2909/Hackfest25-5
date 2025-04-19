@@ -806,6 +806,20 @@ app.post("/api/book", async (req, res) => {
     res.status(500).json({ error: "Failed to save booking" });
   }
 });
+// 📤 Route to get bookings by email (for frontend display)
+app.get("/api/bookings", async (req, res) => {
+  const { email } = req.query;
+
+  if (!email) return res.status(400).json({ error: "Email query is required" });
+
+  try {
+    const bookings = await Booking.find({ email });
+    res.status(200).json(bookings);
+  } catch (err) {
+    console.error("Error fetching bookings:", err);
+    res.status(500).json({ error: "Failed to fetch bookings" });
+  }
+});
 
 // ----------------- Start Server ------------------
 app.listen(PORT, () => {
