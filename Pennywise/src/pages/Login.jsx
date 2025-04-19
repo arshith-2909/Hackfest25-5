@@ -39,10 +39,15 @@ const Login = () => {
     setError("");
     try {
       if (isRegistering) {
+        // Register a new user
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+        
+        // Set user details in localStorage
         localStorage.setItem("userEmail", user.email);
-
+        localStorage.setItem("spareChange", 0); // Assuming default spareChange is 0
+        
+        // Store user info in Firestore
         await setDoc(doc(db, "users", user.uid), {
           email: user.email,
           phoneNumber: phoneNumber,
@@ -50,6 +55,7 @@ const Login = () => {
 
         navigate("/details-form");
       } else {
+        // Login an existing user
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         localStorage.setItem("userEmail", userCredential.user.email);
       }

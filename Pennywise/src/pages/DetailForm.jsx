@@ -25,7 +25,7 @@ const DetailsForm = () => {
         atmNo,
         bankPassword,
       }, { merge: true });
-
+      localStorage.setItem("userSpareChange", spareChange);
       alert("Details saved successfully!");
       navigate("/dashboard"); // or dashboard
     } catch (err) {
