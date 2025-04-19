@@ -4,14 +4,14 @@ const cors = require('cors');
 const axios = require('axios');
 const mongoose = require("mongoose");
 
-
-
+const bodyParser = require("body-parser");
 require('dotenv').config();
 const PORT = 5000;
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json()); 
 // const Razorpay = require('razorpay');
 
 
@@ -565,7 +565,93 @@ app.get("/api/target/:email", async (req, res) => {
   }
 });
 
-// Start the server
+
+const Razorpay = require("razorpay");
+
+
+
+// ✅ Recharge DB (separate connection)
+const rechargeConnection = mongoose.createConnection(
+  "mongodb+srv://karthik12:Karthik1234@cluster0.zi1bjbr.mongodb.net/rechargeDB",
+  {
+    useNewUrlParser: true,
+  }
+);
+
+rechargeConnection.once("open", () =>
+  console.log("✅ Connected to Recharge DB")
+);
+
+// ✅ Transaction Schema + Model (using separate connection)
+const transactionSchema = new mongoose.Schema({
+  amount: Number,
+  paymentId: String,
+  orderId: String,
+  status: String,
+  date: { type: Date, default: Date.now },
+});
+
+const Transaction = rechargeConnection.model("Transaction", transactionSchema);
+
+// ✅ Razorpay setup
+const razorpay = new Razorpay({
+  key_id: "rzp_test_324CoSO7L2dLSO",
+  key_secret: "CngumTuOFvI2Qc7AhxNuZBWX",
+});app.post('/create-order', async (req, res) => {
+  try {
+    console.log("Received request body:", req.body);  // Add this line to log the request body
+    const { amount } = req.body;
+
+    if (!amount) {
+      console.log("Amount is missing!");
+      return res.status(400).json({ error: 'Amount is required' });
+    }
+
+    const order = await razorpay.orders.create({
+      amount: amount * 100,
+      currency: 'INR',
+      receipt: `receipt_order_${Math.random().toString(36).substr(2, 9)}`,
+    });
+
+    console.log("Razorpay order created:", order);
+    res.json(order);
+  } catch (error) {
+    console.error("Error creating Razorpay order:", error);  // More detailed error logging
+    res.status(500).json({ error: 'Payment failed', message: error.message });
+  }
+});
+
+// ✅ Save Transaction to MongoDB
+app.post("/save-transaction", async (req, res) => {
+  const { amount, paymentId, orderId, status } = req.body;
+
+  try {
+    const newTransaction = new Transaction({
+      amount,
+      paymentId,
+      orderId,
+      status,
+    });
+
+    await newTransaction.save();
+    res.json({ message: "Transaction saved successfully" });
+  } catch (err) {
+    console.error("Error saving transaction:", err);
+    res.status(500).json({ error: "Failed to save transaction" });
+  }
+});
+
+// ✅ Optional: Get all transactions
+app.get("/transactions", async (req, res) => {
+  try {
+    const all = await Transaction.find().sort({ date: -1 });
+    res.json(all);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch transactions" });
+  }
+});
+
+// ----------------- Start Server ------------------
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });

@@ -19,6 +19,7 @@ import Product from "./pages/Product";
 import DetailsForm from "./pages/DetailForm";
 
 import WishList from "./pages/WishList";
+import Recharge from "./pages/Recharge";
 
 
 
@@ -49,6 +50,7 @@ const App = () => {
         <Route path="/spare-change-widget" element={<SpareChangeWidget />} />
         <Route path="/product" element={<Product />} />
         <Route path="/wishlist" element={<WishList />} />
+        <Route path="/recharge" element={<Recharge />} />
         
 
        
