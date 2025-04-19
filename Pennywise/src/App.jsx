@@ -25,8 +25,13 @@ import Dashboard from "./pages/dashboard";
 import Transaction from "./pages/Transaction";
 
 import Profile from "./pages/Profile";
+<<<<<<< HEAD
 import TransactionDetails from "./pages/History";
 
+=======
+
+import "./App.css";
+>>>>>>> fc8ba8c50279d8867a4bd0d31d155c199dac1acd
 
 const App = () => {
   const [user, setUser] = useState(null); // 👈 add this

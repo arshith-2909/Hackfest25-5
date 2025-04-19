@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -34,21 +34,61 @@ const DetailsForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-md w-full max-w-md space-y-4 border border-gray-200">
-        <h2 className="text-2xl font-semibold text-center text-indigo-600">Additional Details</h2>
+    <div className="min-h-screen flex items-center justify-center bg-[#1A1D23]">
+      <form onSubmit={handleSubmit} className="bg-[#2F3436] p-8 rounded-xl shadow-md w-full max-w-md space-y-6 text-white">
+        <h2 className="text-2xl font-bold mb-4 text-[#34C759]">📊 Enter Your Details</h2>
 
-        <input type="number" placeholder="Income" value={income} onChange={(e) => setIncome(e.target.value)} className="w-full p-2 border rounded" required />
+        <input
+          type="number"
+          placeholder="Income"
+          value={income}
+          onChange={(e) => setIncome(e.target.value)}
+          className="w-full p-2 border rounded bg-[#2F3436] text-white border-gray-400 focus:ring-[#34C759] focus:outline-none"
+          required
+        />
 
-        <input type="number" placeholder="Spare Change in percentage" value={spareChange} onChange={(e) => setSpareChange(e.target.value)} className="w-full p-2 border rounded" required />
+        <input
+          type="number"
+          placeholder="Spare Change (%)"
+          value={spareChange}
+          onChange={(e) => setSpareChange(e.target.value)}
+          className="w-full p-2 border rounded bg-[#2F3436] text-white border-gray-400 focus:ring-[#34C759] focus:outline-none"
+          required
+        />
 
-        <input type="text" placeholder="Account Number" value={accountNo} onChange={(e) => setAccountNo(e.target.value)} className="w-full p-2 border rounded" required />
+        <input
+          type="text"
+          placeholder="Account Number"
+          value={accountNo}
+          onChange={(e) => setAccountNo(e.target.value)}
+          className="w-full p-2 border rounded bg-[#2F3436] text-white border-gray-400 focus:ring-[#34C759] focus:outline-none"
+          required
+        />
 
-        <input type="text" placeholder="ATM Number" value={atmNo} onChange={(e) => setAtmNo(e.target.value)} className="w-full p-2 border rounded" required />
+        <input
+          type="text"
+          placeholder="ATM Number"
+          value={atmNo}
+          onChange={(e) => setAtmNo(e.target.value)}
+          className="w-full p-2 border rounded bg-[#2F3436] text-white border-gray-400 focus:ring-[#34C759] focus:outline-none"
+          required
+        />
 
-        <input type="password" placeholder="Bank Password" value={bankPassword} onChange={(e) => setBankPassword(e.target.value)} className="w-full p-2 border rounded" required />
+        <input
+          type="password"
+          placeholder="Bank Password"
+          value={bankPassword}
+          onChange={(e) => setBankPassword(e.target.value)}
+          className="w-full p-2 border rounded bg-[#2F3436] text-white border-gray-400 focus:ring-[#34C759] focus:outline-none"
+          required
+        />
 
-        <button type="submit" className="w-full bg-indigo-500 text-white py-2 rounded hover:bg-indigo-600">Submit</button>
+        <button
+          type="submit"
+          className="w-full bg-[#34C759] text-white py-2 rounded hover:bg-green-700 focus:outline-none"
+        >
+          Submit
+        </button>
       </form>
     </div>
   );
