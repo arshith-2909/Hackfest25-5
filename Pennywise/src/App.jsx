@@ -20,7 +20,7 @@ import DetailsForm from "./pages/DetailForm";
 
 import WishList from "./pages/WishList";
 import Recharge from "./pages/Recharge";
-
+import Dashboard from "./pages/dashboard";
 
 
 
@@ -31,6 +31,8 @@ const App = () => {
   return (
     <Router>
       <Routes>
+      {/* ✅ add this route */}
+        <Route path="/dashboard" element={<Dashboard />} /> {/* ✅ add this route */}
         <Route path="/details-form" element={<DetailsForm />} /> {/* ✅ add this route */}
         <Route path="/Login" element={<Login setUser={setUser} />} /> {/* ✅ pass setUser here */}
 

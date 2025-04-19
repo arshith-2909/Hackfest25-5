@@ -1,72 +1,112 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 const BillPayment = () => {
-  const [amount, setAmount] = useState('');
-  const [billType, setBillType] = useState('electricity');
-  const [spareChange, setSpareChange] = useState(null);
+  const [category, setCategory] = useState("electricity");
+  const [amount, setAmount] = useState("");
+  const [spareChange, setSpareChange] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [paymentData, setPaymentData] = useState(null);
   const [spareEnabled, setSpareEnabled] = useState(true);
 
-  const handleBill = async () => {
+  const handleAmountChange = (e) => {
+    const val = parseFloat(e.target.value) || 0;
+    setAmount(val);
+    updateSpare(val, spareEnabled);
+  };
+
+  const updateSpare = (amt, isEnabled) => {
+    if (isEnabled) {
+      const spare = parseFloat((amt * 0.02).toFixed(2));
+      setSpareChange(spare);
+      setTotalAmount(amt + spare);
+    } else {
+      setSpareChange(0);
+      setTotalAmount(amt);
+    }
+  };
+
+  const toggleSpare = () => {
+    const newStatus = !spareEnabled;
+    setSpareEnabled(newStatus);
+    updateSpare(amount, newStatus);
+  };
+
+  const handleBillPayment = async () => {
     try {
-      const res = await axios.post("http://localhost:5002/api/transaction", {
-        amount: parseFloat(amount),
-        type: "bill",
-        spareEnabled,
-        details: billType
+      const res = await axios.post("http://localhost:5000/api/paybill", {
+        category,
+        amount,
+        spareChange,
+        totalAmount,
       });
-      setSpareChange(res.data.spareChange);
-      setAmount('');
+      setPaymentData(res.data);
+      alert("✅ Bill paid successfully!");
     } catch (err) {
-      console.error("Bill payment failed:", err);
+      alert("❌ Payment failed");
+      console.error(err);
     }
   };
 
   return (
-    <div className="bg-white p-4 rounded shadow-md">
-      <h2 className="text-xl font-semibold mb-3">Bill Payment</h2>
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-xl shadow-md">
+      <h2 className="text-2xl font-bold mb-4">💡 Pay Your Bills</h2>
 
-      <div className="mb-2">
-        <label className="block text-sm mb-1">Select Bill Type:</label>
-        <select
-          value={billType}
-          onChange={(e) => setBillType(e.target.value)}
-          className="border p-2 rounded w-full"
+      <label className="block mb-2 font-medium">Bill Type:</label>
+      <select
+        className="w-full mb-4 p-2 border rounded"
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+      >
+        <option value="electricity">Electricity</option>
+        <option value="water">Water</option>
+        <option value="internet">Internet</option>
+      
+        <option value="tv">DTH / TV</option>
+      </select>
+
+      <label className="block mb-2 font-medium">Enter Amount:</label>
+      <input
+        type="number"
+        className="w-full mb-4 p-2 border rounded"
+        value={amount}
+        onChange={handleAmountChange}
+      />
+
+      <div className="mb-4 flex items-center justify-between">
+        <p>
+          🧾 Spare Change (2%): <strong>₹{spareChange}</strong>
+        </p>
+        <button
+          onClick={toggleSpare}
+          className={`text-sm px-2 py-1 rounded ${
+            spareEnabled
+              ? "bg-red-100 text-red-700 hover:bg-red-200"
+              : "bg-green-100 text-green-700 hover:bg-green-200"
+          }`}
         >
-          <option value="electricity">Electricity</option>
-          <option value="water">Water</option>
-          <option value="broadband">Broadband</option>
-          <option value="gas">Gas</option>
-          <option value="mobile">Mobile Recharge</option>
-        </select>
+          {spareEnabled ? "Cancel Spare" : "Enable Spare"}
+        </button>
       </div>
 
-      <div className="mb-2">
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          className="border p-2 w-full"
-          placeholder="Enter amount"
-        />
-      </div>
+      <p className="mb-4">
+        💳 Total Payable Amount: <strong>₹{totalAmount}</strong>
+      </p>
 
-      <div className="mb-2 flex items-center space-x-2">
-        <input
-          type="checkbox"
-          checked={spareEnabled}
-          onChange={() => setSpareEnabled(!spareEnabled)}
-        />
-        <label>Enable Spare Change</label>
-      </div>
-
-      <button onClick={handleBill} className="bg-green-600 text-white px-4 py-2 rounded w-full">
-        Pay Bill
+      <button
+        onClick={handleBillPayment}
+        className="w-full bg-purple-600 text-white py-2 rounded hover:bg-purple-700"
+      >
+        Confirm & Pay ₹{totalAmount}
       </button>
 
-      {spareChange !== null && (
-        <div className="mt-3 text-green-600 text-sm">
-          Spare Change Added: ₹{spareChange}
+      {paymentData && (
+        <div className="mt-6 p-4 bg-gray-100 rounded">
+          <h3 className="font-semibold text-lg mb-2">✅ Payment Summary</h3>
+          <p>📂 Bill Type: {paymentData.category}</p>
+          <p>💰 Bill Amount: ₹{paymentData.amount}</p>
+          <p>💸 Spare Change: ₹{paymentData.spareChange}</p>
+          <p>💳 Total Paid: ₹{paymentData.totalAmount}</p>
         </div>
       )}
     </div>
