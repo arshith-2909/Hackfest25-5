@@ -1,4 +1,3 @@
-// History.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -6,10 +5,10 @@ const History = () => {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    const email = localStorage.getItem("userEmail"); // your stored email
-
+    const email = localStorage.getItem("userEmail");
     if (email) {
-        axios.get(`http://localhost:5000/api/bookings?email=${email}`)
+      axios
+        .get(`http://localhost:5000/api/bookings?email=${email}`)
         .then((res) => {
           setBookings(res.data);
         })
@@ -20,31 +19,35 @@ const History = () => {
   }, []);
 
   return (
-    <div>
-      <h2>🧾 Transaction History</h2>
+    <div className="p-6 text-white bg-[#1A1D23] min-h-screen">
+      <h2 className="text-3xl font-bold text-green-400 mb-4">🧾 Transaction History</h2>
       {bookings.length === 0 ? (
-        <p>No records found.</p>
+        <p className="text-gray-300">No records found.</p>
       ) : (
-        <table border="1" cellPadding="10" style={{ marginTop: "20px" }}>
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Category</th>
-              <th>Amount</th>
-              <th>Created At</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookings.map((b, i) => (
-              <tr key={i}>
-                <td>{b.email}</td>
-                <td>{b.category}</td>
-                <td>{b.amount}</td>
-                <td>{new Date(b.createdAt).toLocaleString()}</td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left text-gray-300 border border-gray-600">
+            <thead className="text-xs uppercase bg-[#2F3436] text-green-300">
+              <tr>
+                <th className="px-6 py-3 border border-gray-600">Email</th>
+                <th className="px-6 py-3 border border-gray-600">Category</th>
+                <th className="px-6 py-3 border border-gray-600">Amount</th>
+                <th className="px-6 py-3 border border-gray-600">Created At</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {bookings.map((b, i) => (
+                <tr key={i} className="hover:bg-[#2a2f35]">
+                  <td className="px-6 py-4 border border-gray-700">{b.email}</td>
+                  <td className="px-6 py-4 border border-gray-700">{b.category}</td>
+                  <td className="px-6 py-4 border border-gray-700">{b.amount}</td>
+                  <td className="px-6 py-4 border border-gray-700">
+                    {new Date(b.createdAt).toLocaleString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
